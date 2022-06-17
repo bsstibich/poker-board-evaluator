@@ -1,28 +1,48 @@
-#from phevaluator import all
+from phevaluator import evaluate_cards, Card
 import itertools
+#create deck
+deck = [Card('As'), Card('Ac'), Card('Ad'), Card('Ah'), Card('2s'), Card('2c'), Card('2d'), Card('2h'),Card('3s'), Card('3c'), Card('3d'),
+        Card('3h'),Card('4s'), Card('4c'),
+        Card('4d'), Card('4h'),Card('5s'), Card('5c'), Card('5d'), Card('5h'),
+        Card('6s'), Card('6c'), Card('6d'), Card('6h'),Card('7s'), Card('7c'), Card('7d'),
+        Card('7h'),Card('8s'), Card('8c'), Card('8d'), Card('8h'),Card('9s'), Card('9c'), Card('9d'), Card('9h'),Card('Ts'), Card('Tc'),
+        Card('Td'), Card('Th'),Card('Js'), Card('Jc'), Card('Jd'), Card('Jh'),
+        Card('Qs'), Card('Qc'), Card('Qd'), Card('Qh'),Card('Ks'), Card('Kc'), Card('Kd'), Card('Kh')]
 
-deck = ['As', 'Ac', 'Ad', 'Ah', '2s', '2c', '2d', '2h','3s', '3c', '3d', '3h','4s', '4c', '4d', '4h','5s', '5c', '5d', '5h',
-    '6s', '6c', '6d', '6h','7s', '7c', '7d', '7h','8s', '8c', '8d', '8h','9s', '9c', '9d', '9h','Ts', 'Tc', 'Td', 'Th','Js', 'Jc', 'Jd', 'Jh',
-    'Qs', 'Qc', 'Qd', 'Qh','Ks', 'Kc', 'Kd', 'Kh']
-
-hands = list(itertools.combinations(deck, 2))
 
 running = 1
 
 while running:
-    phase = input("How many cards are on the board? ")
-    if phase == '0':
-        board = 0
-    elif phase == '3':
-        board = 3
-    elif phase == '4':
-        board = 4
-    elif phase == '5':
-        board = 5
-    else:
-        print("Invalid board state")
-        break
-    input("Please list these {} cards seperated by a space\nex - Ac 3d 9s".format(board))
+    #get input of flop
+    board_cards = input("Please list flop cards seperated by a space\nex - Ac 3d 9s\n")
+    board_cards_f = tuple(map(str, board_cards.split(' ')))
+
+    #remove board cards from deck
+    for i in range(0,3):
+        deck.remove(board_cards_f[i])
+    #create all possible holes
+    holes = list(itertools.combinations(deck, 2))
+    result = []
+    #for each hole
+    for i in range(0, len(holes)):
+        print(i)
+        #check pheval score
+        hand = board_cards_f + holes[i]
+        hand_f = []
+        for i in range(0, len(hand)):
+            hand_f.append(Card(hand[i]))
+        evaluate_cards(hand_f[0], hand_f[1], hand_f[2], hand_f[3], hand_f[4])
+        #if result has less than 5 items
+        if len(result) < 5:
+            result.append(holes[i])
+        print(result)
+
+    hand = board_cards_f + holes[6]
+    hand_f = []
+    for i in range(0, len(hand)):
+        hand_f.append(Card(hand[i]))
+    hand_f = list(hand_f)
+
 
 
 
