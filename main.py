@@ -37,9 +37,8 @@ while running:
             hand_f.append(Card(hand[j]))
         #check and assign pheval score
         holes[i].pheval_score = evaluate_cards(hand_f[0], hand_f[1], hand_f[2], hand_f[3], hand_f[4])
-        #if result has less than 7 items
-        tie = False
         #check if the current hole score is already present in result
+        tie = False
         for hole in result:
             if hole.pheval_score == holes[i].pheval_score:
                 tie = True
