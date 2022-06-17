@@ -1,4 +1,5 @@
 from phevaluator import evaluate_cards, Card
+from hole_class import Hole
 import itertools
 #create deck
 deck = [Card('As'), Card('Ac'), Card('Ad'), Card('Ah'), Card('2s'), Card('2c'), Card('2d'), Card('2h'),Card('3s'), Card('3c'), Card('3d'),
@@ -18,31 +19,35 @@ while running:
     board_cards_f = tuple(map(str, board_cards.split(' ')))
 
     #remove board cards from deck
-    for i in range(0,3):
-        deck.remove(board_cards_f[i])
+    for x in range(0,3):
+        deck.remove(board_cards_f[x])
     #create all possible holes
     holes = list(itertools.combinations(deck, 2))
+    for y in range(0, len(holes)):
+        holes[y] = Hole(holes[y],0)
+        #print("new hole: " , holes[i].cards)
     result = []
     #for each hole
     for i in range(0, len(holes)):
-        print(i)
         #check pheval score
-        hand = board_cards_f + holes[i]
+        hand = board_cards_f + holes[i].cards
         hand_f = []
-        for i in range(0, len(hand)):
-            hand_f.append(Card(hand[i]))
-        evaluate_cards(hand_f[0], hand_f[1], hand_f[2], hand_f[3], hand_f[4])
-        #if result has less than 5 items
-        if len(result) < 5:
+        for j in range(0, len(hand)):
+            hand_f.append(Card(hand[j]))
+        #check and assign pheval score
+        holes[i].pheval_score = evaluate_cards(hand_f[0], hand_f[1], hand_f[2], hand_f[3], hand_f[4])
+        #if result has less than 7 items
+        if len(result) < 7:
+            #add hole to result
             result.append(holes[i])
-        print(result)
+            result.sort(key=lambda x: x.pheval_score, reverse=True)
+        elif len(result) == 7:
+            if holes[i].pheval_score <= result[6].pheval_score:
+                result[6] = holes[i]
+                result.sort(key=lambda x: x.pheval_score, reverse=True)
 
-    hand = board_cards_f + holes[6]
-    hand_f = []
-    for i in range(0, len(hand)):
-        hand_f.append(Card(hand[i]))
-    hand_f = list(hand_f)
-
-
+    for hole in result:
+        print(hole.cards)
+        print(hole.pheval_score)
 
 
