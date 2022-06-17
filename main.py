@@ -28,6 +28,7 @@ while running:
         #print("new hole: " , holes[i].cards)
     result = []
     #for each hole
+    RESULT_SIZE = 7
     for i in range(0, len(holes)):
         #check pheval score
         hand = board_cards_f + holes[i].cards
@@ -37,15 +38,20 @@ while running:
         #check and assign pheval score
         holes[i].pheval_score = evaluate_cards(hand_f[0], hand_f[1], hand_f[2], hand_f[3], hand_f[4])
         #if result has less than 7 items
-        if len(result) < 7:
-            #add hole to result
+        tie = False
+        #check if the current hole score is already present in result
+        for hole in result:
+            if hole.pheval_score == holes[i].pheval_score:
+                tie = True
+        #if result is under size just throw current hole in
+        if len(result) < RESULT_SIZE and not tie:
             result.append(holes[i])
-            result.sort(key=lambda x: x.pheval_score, reverse=True)
-        elif len(result) == 7:
-            if holes[i].pheval_score <= result[6].pheval_score:
-                result[6] = holes[i]
-                result.sort(key=lambda x: x.pheval_score, reverse=True)
-
+        #if result is at size then compare current hole to lowest score in result
+        elif len(result) == RESULT_SIZE and holes[i].pheval_score < result[-1].pheval_score and not tie:
+            result[-1] = holes[i]
+        #sort result based on pheval_score of each hole
+        result.sort(key=lambda x: x.pheval_score)
+    print("Top Cards:")
     for hole in result:
         print(hole.cards)
         print(hole.pheval_score)
