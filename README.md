@@ -6,4 +6,5 @@ For example if you input into the program that the board is Ace of Diamonds, Kin
 
 
 https://github.com/HenryRLee/PokerHandEvaluator/tree/master/python
--not yet implimented into my program but a python package that will compare two 5 card poker hands and assign a number score. Will be used to determine and rank the best possible hands.
+
+-python package that compares two 5 card poker hands and assign a number score. Used to determine and rank the best possible hands.
